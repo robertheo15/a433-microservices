@@ -16,7 +16,7 @@ services:
   # The second service is a custom application
   item-app:
     # Uses a custom image from Docker Hub
-    image: ghcr.io/robertheo15/item-app:v1
+    image: robertheo15/item-app:v1
     # Maps the port 8080 inside the container to the port 80 on the host machine
     ports:
       - "80:8080"

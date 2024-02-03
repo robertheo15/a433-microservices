@@ -1,0 +1,6 @@
+Github registry package
+
+https://github.com/users/robertheo15/packages/container/package/item-app
+
+Docker registry package
+https://hub.docker.com/r/robertheo/item-app
