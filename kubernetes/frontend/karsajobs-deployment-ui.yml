@@ -1,0 +1,23 @@
+apiVersion: apps/v1  # API version to use
+kind: Deployment  # Kind of Kubernetes object to create
+metadata:
+  name: karsajobs-frontend  # Name of the Deployment
+spec:
+  replicas: 1  # Number of pod replicas
+  selector:
+    matchLabels:
+      app: karsajobs-frontend  # Label to identify the pods that this Deployment manages
+  template:
+    metadata:
+      labels:
+        app: karsajobs-frontend  # Label to be applied to the pods created by this Deployment
+    spec:
+      containers:
+        - name: karsajobs-ui  # Name of the container
+          image: ghcr.io/robertheo15/karsajobs-ui:latest  # Image to use for the container
+          imagePullPolicy: Always  # Always pull the latest image
+          ports:
+            - containerPort: 8000  # Port that the container exposes
+          env:
+            - name: VUE_APP_BACKEND  # Environment variable for the backend URL
+              value: "http://127.0.0.1:45347"  # Value of the VUE_APP_BACKEND environment variable

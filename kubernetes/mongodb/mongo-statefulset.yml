@@ -1,0 +1,52 @@
+apiVersion: apps/v1  # API version to use
+kind: StatefulSet  # Kind of Kubernetes object to create
+metadata:
+  name: mongodb  # Name of the StatefulSet
+spec:
+  serviceName: mongo-service  # Name of the Service that governs this StatefulSet
+  replicas: 1  # Number of pod replicas
+  minReadySeconds: 10  # Minimum number of seconds for which a newly created pod should be ready without any of its containers crashing, for it to be considered available
+  selector:
+    matchLabels:
+      app: mongo  # Label to identify the pods that this StatefulSet manages
+  template:
+    metadata:
+      labels:
+        app: mongo  # Label to be applied to the pods created by this StatefulSet
+    spec:
+      containers:
+        - name: mongo  # Name of the container
+          image: mongo  # Image to use for the container
+          ports:
+            - containerPort: 27017  # Port that the container exposes
+              name: default-port
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME_FILE  # Environment variable for the MongoDB root username file
+              value: etc/mongo-credentials/MONGO_ROOT_USERNAME  # Value of the MONGO_INITDB_ROOT_USERNAME_FILE environment variable
+            - name: MONGO_INITDB_ROOT_PASSWORD_FILE  # Environment variable for the MongoDB root password file
+              value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD  # Value of the MONGO_INITDB_ROOT_PASSWORD_FILE environment variable
+          volumeMounts:
+            - name: mongo-data  # Name of the volume to mount
+              mountPath: /data/db  # Path inside the container where the volume is mounted
+            - name: mongo-config  # Name of the volume to mount
+              mountPath: /config  # Path inside the container where the volume is mounted
+            - name: mongo-credentials  # Name of the volume to mount
+              mountPath: /etc/mongo-credentials  # Path inside the container where the volume is mounted
+      volumes:
+        - name: mongo-data  # Name of the volume
+          persistentVolumeClaim:
+            claimName: mongo-pvc  # Name of the PersistentVolumeClaim to use
+        - name: mongo-config  # Name of the volume
+          configMap:
+            name: mongo-config  # Name of the ConfigMap to use
+            items:
+              - key: mongo.conf  # Key in the ConfigMap to use
+                path: mongo.conf  # Path in the volume where the ConfigMap item is mounted
+        - name: mongo-credentials  # Name of the volume
+          secret:
+            secretName: mongo-credentials  # Name of the Secret to use
+            items:
+              - key: MONGO_ROOT_USERNAME  # Key in the Secret to use
+                path: MONGO_ROOT_USERNAME  # Path in the volume where the Secret item is mounted
+              - key: MONGO_ROOT_PASSWORD  # Key in the Secret to use
+                path: MONGO_ROOT_PASSWORD  # Path in the volume where the Secret item is mounted

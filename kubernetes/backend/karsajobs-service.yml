@@ -1,0 +1,14 @@
+apiVersion: v1  # API version to use
+kind: Service  # Kind of Kubernetes object to create
+metadata:
+  name: karsajobs-service  # Name of the Service
+  labels:
+    app: karsajobs  # Label to identify the Service
+spec:
+  type: NodePort  # Type of the Service, NodePort exposes the Service on each Node’s IP at a static port
+  ports:
+  - port: 8080  # The port that the Service will listen on
+    protocol: TCP  # The network protocol that the Service will use
+    nodePort: 31943  # The port on each node where this Service is exposed
+  selector:
+    app: karsajobs  # Label to identify the pods that this Service will route traffic to

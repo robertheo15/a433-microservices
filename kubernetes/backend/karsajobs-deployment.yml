@@ -1,0 +1,37 @@
+apiVersion: apps/v1  # API version to use
+kind: Deployment  # Kind of Kubernetes object to create
+metadata:
+  name: karsajobs-backend  # Name of the Deployment
+  labels:
+    app: karsajobs-be  # Label to identify the Deployment
+spec:
+  replicas: 1  # Number of pod replicas
+  selector:
+    matchLabels:
+      app: karsajobs  # Label to identify the pods that this Deployment manages
+  template:
+    metadata:
+      labels:
+        app: karsajobs  # Label to be applied to the pods created by this Deployment
+    spec:
+      containers:
+        - name: karsajobs  # Name of the container
+          image: ghcr.io/robertheo15/karsajobs:latest  # Image to use for the container
+          imagePullPolicy: Always  # Always pull the latest image
+          ports:
+            - containerPort: 8080  # Port that the container exposes
+          env:
+            - name: APP_PORT  # Environment variable for the application port
+              value: "8080"  # Value of the APP_PORT environment variable
+            - name: MONGO_HOST  # Environment variable for the MongoDB host
+              value: mongo-service  # Value of the MONGO_HOST environment variable
+            - name: MONGO_USER  # Environment variable for the MongoDB username
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-credentials  # Name of the Secret to get the value from
+                  key: MONGO_ROOT_USERNAME  # Key in the Secret to get the value from
+            - name: MONGO_PASS  # Environment variable for the MongoDB password
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-credentials  # Name of the Secret to get the value from
+                  key: MONGO_ROOT_PASSWORD  # Key in the Secret to get the value from

@@ -1,0 +1,8 @@
+Image Registry:
+Karsajobs: https://github.com/users/robertheo15/packages/container/package/karsajobs
+Karsajobs-UI: https://github.com/users/robertheo15/packages/container/package/karsajobs-ui
+
+Repository Branch:
+Karsajobs: https://github.com/robertheo15/a433-microservices/tree/karsajobs
+Karsajobs-UI: https://github.com/robertheo15/a433-microservices/tree/karsajobs-ui
+Kubernetes: https://github.com/robertheo15/karsajobs-kubernetes

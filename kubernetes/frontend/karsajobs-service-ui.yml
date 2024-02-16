@@ -1,0 +1,16 @@
+apiVersion: v1  # API version to use
+kind: Service  # Kind of Kubernetes object to create
+metadata:
+  name: karsajobs-ui-service  # Name of the Service
+  labels:
+    app: karsajobs-frontend  # Label to identify the Service
+    # tier: frontend  # Additional label (currently commented out)
+spec:
+  type: NodePort  # Type of the Service, NodePort exposes the Service on each Node’s IP at a static port
+  ports:
+  - port: 8000  # The port that the Service will listen on
+    protocol: TCP  # The network protocol that the Service will use
+    nodePort: 31944  # The port on each node where this Service is exposed
+  selector:
+    app: karsajobs-frontend  # Label to identify the pods that this Service will route traffic to
+    # tier: frontend  # Additional label for pod selection (currently commented out)
