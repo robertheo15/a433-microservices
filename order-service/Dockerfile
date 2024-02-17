@@ -11,10 +11,10 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-# Expose the port used by the application, 3001
-EXPOSE 3001
+# Expose the port used by the application, 3000
+EXPOSE 3000
 
-ENV PORT=3001
+ENV PORT=3000
 ENV AMQP_URL="amqp://guest:guest@localhost:5672"
 
 # When the container is launched, run the server with the command npm start
