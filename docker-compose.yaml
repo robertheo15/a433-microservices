@@ -1,0 +1,65 @@
+# The version of Docker Compose file format
+version: "3.7"
+
+# Defines the services that make up your app
+services:
+  # The first service is a custom application
+  order-service:
+    # Uses a custom image from GitHub Container Registry
+    image: ghcr.io/robertheo15/order-service:v1
+    # Maps the port 3000 inside the container to the port 3000 on the host machine
+    ports:
+    - "3000:3000"
+    # If the service stops, Docker will automatically try to restart it
+    restart: always
+    # Specifies that this service depends on the rabbitmq service
+    depends_on:
+    - rabbitmq
+    # Sets the AMQP URL for connecting to RabbitMQ
+    environment:
+      AMQP_URL: amqp://guest:guest@rabbitmq:5672
+    # Specifies that this service is part of the rabbitmq_network network
+    networks:
+    - rabbitmq_network
+  # The second service is another custom application
+  shipping-service:
+    # Uses a custom image from GitHub Container Registry
+    image: ghcr.io/robertheo15/shipping-service:v1
+    # Maps the port 3001 inside the container to the port 3001 on the host machine
+    ports:
+      - "3001:3001"
+    # Sets the AMQP URL for connecting to RabbitMQ
+    environment:
+      AMQP_URL: amqp://guest:guest@rabbitmq:5672
+    # Specifies that this service depends on the rabbitmq service
+    depends_on:
+      - rabbitmq
+    # If the service stops, Docker will automatically try to restart it
+    restart: always
+    # Specifies that this service is part of the rabbitmq_network network
+    networks:
+      - rabbitmq_network
+  # The third service is a RabbitMQ server
+  rabbitmq:
+    # Uses the RabbitMQ management image from Docker Hub
+    image: rabbitmq:latest
+    # Maps the ports 5672 and 15672 inside the container to the same ports on the host machine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    # Mounts the host machine's directories for data and logs to the corresponding directories inside the container
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    # If the service stops, Docker will automatically try to restart it
+    restart: always
+    # Specifies that this service is part of the rabbitmq_network network
+    networks:
+    - rabbitmq_network
+
+# Defines the networks used by the services
+networks:
+  # The network used by all services
+  rabbitmq_network:
+    # Uses the bridge driver
+    driver: bridge

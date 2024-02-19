@@ -1,0 +1,9 @@
+order-service images:
+https://github.com/users/robertheo15/packages/container/package/order-service
+
+shipping-service images:
+https://github.com/users/robertheo15/packages/container/shipping-service/
+
+
+repository:
+https://github.com/robertheo15/a433-microservices/tree/e-commerce-app
